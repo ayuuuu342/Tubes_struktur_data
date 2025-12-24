@@ -1,31 +1,21 @@
 #include "toko.h"
 
-Node::Node(int h, string nama, string m, int stok) {
+Node::Node(int h, string nama, string m, int stok, string w) {
     harga = h;
     namaBarang = nama;
     merk = m;
     sisaStok = stok;
-    jumlahWarna = 0;
+
+    warna[0] = w;
+    jumlahWarna = 1;
+
     left = NULL;
     right = NULL;
 }
 
+
 TokoAlatTulis::TokoAlatTulis() {
     root = NULL;
-}
-
-Node* TokoAlatTulis::insert(Node* node, int harga, string nama, string merk, int stok) {
-    if (node == NULL) {
-        return new Node(harga, nama, merk, stok);
-    }
-    
-    if (harga < node->harga) {
-        node->left = insert(node->left, harga, nama, merk, stok);
-    } else if (harga > node->harga) {
-        node->right = insert(node->right, harga, nama, merk, stok);
-    }
-    
-    return node;
 }
 
 void TokoAlatTulis::inorder(Node* node) {
@@ -58,22 +48,23 @@ Node* TokoAlatTulis::search(Node* node, int harga) {
     return search(node->right, harga);
 }
 
-void TokoAlatTulis::tambahBarang(int harga, string nama, string merk, int stok) {
-    root = insert(root, harga, nama, merk, stok);
+Node* TokoAlatTulis::insert(Node* node, int harga, string nama, string merk, int stok, string warna) {
+    if (node == NULL) {
+        return new Node(harga, nama, merk, stok, warna);
+    }
+
+    if (harga < node->harga) {
+        node->left = insert(node->left, harga, nama, merk, stok, warna);
+    } else if (harga > node->harga) {
+        node->right = insert(node->right, harga, nama, merk, stok, warna);
+    }
+
+    return node;
+}
+void TokoAlatTulis::tambahBarang(int harga, string nama, string merk, int stok, string warna) {
+    root = insert(root, harga, nama, merk, stok, warna);
     cout << "Barang berhasil ditambahkan!\n";
 }
-
-/*void TokoAlatTulis::tambahWarna(int harga, string warna) {
-    Node* barang = search(root, harga);
-    if (barang != NULL && barang->jumlahWarna < 10) {
-        barang->warna[barang->jumlahWarna] = warna;
-        barang->jumlahWarna++;
-        cout << "Warna berhasil ditambahkan!\n";
-    } else {
-        cout << "Barang tidak ditemukan atau warna sudah penuh!\n";
-    }
-}*/
-
 
 void TokoAlatTulis::tampilkanSemua() {
     cout << "\n===== DAFTAR BARANG =====";
@@ -102,51 +93,15 @@ void TokoAlatTulis::cariBarang(int harga) {
 
 // DATA DUMMY WOY
 void TokoAlatTulis::isiDataDummy() {
-    
-    root = insert(root, 5000, "Pulpen Gel", "Pilot", 150);
-    tambahWarna(5000, "Hitam");
-    tambahWarna(5000, "Biru");
-    tambahWarna(5000, "Merah"); 
-
-    root = insert(root, 2500, "Pensil 2B", "Faber Castell", 200);
-    tambahWarna(2500, "Hitam");
-    
-    root = insert(root, 8000, "Spidol Whiteboard", "Snowman", 80);
-    tambahWarna(8000, "Hitam");
-    tambahWarna(8000, "Biru");
-    tambahWarna(8000, "Merah");
-    tambahWarna(8000, "Hijau");
-
-    root = insert(root, 1500, "Penghapus", "Steadtler", 300);
-    tambahWarna(1500, "Putih");
-    tambahWarna(1500, "Biru");
-
-    root = insert(root, 12000, "Buku Tulis", "Sinar Dunia", 120);
-    tambahWarna(12000, "Merah");
-    tambahWarna(12000, "Biru");
-    tambahWarna(12000, "Hijau");
-    tambahWarna(12000, "Kuning");
-
-    root = insert(root, 3500, "Penggaris 30cm", "Butterfly", 100);
-    tambahWarna(3500, "Transparan");
-    tambahWarna(3500, "Biru");
-
-    root = insert(root, 15000, "Kertas HVS A4", "Paperline", 50);
-    tambahWarna(15000, "Putih");
-
-    root = insert(root, 7000, "Lem Cair", "UHU", 60);
-    tambahWarna(7000, "Putih");
-
-    root = insert(root, 4000, "Correction Tape", "Kenko", 90);
-    tambahWarna(4000, "Putih");
-    tambahWarna(4000, "Biru");
-
-    root = insert(root, 10000, "Stabilo Highlighter", "Stabilo Boss", 75);
-    tambahWarna(10000, "Kuning");
-    tambahWarna(10000, "Hijau");
-    tambahWarna(10000, "Pink");
-    tambahWarna(10000, "Orange");
-    
+    root = insert(root, 5000, "Pulpen Gel", "Pilot", 150, "Hitam");
+    root = insert(root, 2500, "Pensil 2B", "Faber Castell", 200, "Biru");
+    root = insert(root, 8000, "Spidol Whiteboard", "Snowman", 80, "Merah");
+    root = insert(root, 1500, "Penghapus", "Steadtler", 300, "Hijau");
+    root = insert(root, 12000, "Buku Tulis", "Sinar Dunia", 120, "Putih");
+    root = insert(root, 3500, "Penggaris 30cm", "Butterfly", 100, "Ungu");
+    root = insert(root, 15000, "Kertas HVS A4", "Paperline", 50, "Putih");
+    root = insert(root, 7000, "Lem Cair", "UHU", 60, "Merah");
+    root = insert(root, 4000, "Correction Tape", "Kenko", 90, "Biru");
+    root = insert(root, 10000, "Stabilo Highlighter", "Stabilo Boss", 75, "Kuning");
     cout << "Data dummy ditambahkan\n";
-    cout << "================================\n";
 }
